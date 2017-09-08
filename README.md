@@ -1,14 +1,14 @@
 # Fractals
 
-Fractals using Python 3
+[Fractals](https://en.wikipedia.org/wiki/Fractal) using Python 3
 
 # Description
 
 Aim of the project is drawing of escape-time fractals. They currently include:
 
-* Mandelbrot fractal
+* [Mandelbrot fractal](https://en.wikipedia.org/wiki/Mandelbrot_set)
 
-* Burning ship fractal
+* [Burning ship fractal](https://en.wikipedia.org/wiki/Burning_Ship_fractal)
 
 # Prerequisites
 
@@ -26,6 +26,6 @@ Simply launch fractal.py file and watch fractals!
 
 # License
 
-License is MIT. 
+License is [MIT](../master/LICENSE)
 
 
