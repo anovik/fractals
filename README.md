@@ -24,6 +24,11 @@ Simply launch fractal.py file and watch fractals!
 
 # Images
 
+![Alt Mandelbrot](/images/mandelbrot.png?raw=true "Mandelbrot")
+
+
+![Alt Burning Ship](/images/burningShip.png?raw=true "Burning Ship")
+
 # License
 
 License is [MIT](../master/LICENSE)
