@@ -22,19 +22,24 @@ def burningShip(c,iterationsNumber):
         z = pow(abs(z.real) + 1j*abs(z.imag), 2) + c
     return 0
 
-def buildFractal(xmin,xmax,ymin,ymax,width,height,iterationsNumber):
+def buildFractal(algorithm, xmin,xmax,ymin,ymax,width,height,iterationsNumber):
     r1 = np.linspace(xmin, xmax, width)
     r2 = np.linspace(ymin, ymax, height)
     n3 = np.empty((width,height))
     for i in range(width):
         for j in range(height):
-            n3[i,j] = mandelbrot(r1[i] + 1j*r2[j],iterationsNumber)
+            if algorithm == "mandelbrot":
+                n3[i,j] = mandelbrot(r1[i] + 1j*r2[j],iterationsNumber)
+            elif algorithm == "burningShip":
+                n3[i,j] = burningShip(r1[i] + 1j*r2[j],iterationsNumber)
+            else:
+                raise ValueError("Bad algorithm value")
     return (r1,r2,n3)
 
-def drawPlot(xmin,xmax,ymin,ymax,width=10,height=10,iterationsNumber=256):    
+def drawPlot(algorithm, xmin,xmax,ymin,ymax,width=10,height=10,iterationsNumber=256):    
     img_width = DPI * width
     img_height = DPI * height
-    x,y,z = buildFractal(xmin,xmax,ymin,ymax,img_width,img_height,iterationsNumber)
+    x,y,z = buildFractal(algorithm, xmin,xmax,ymin,ymax,img_width,img_height,iterationsNumber)
     
     fig, ax = plt.subplots(figsize=(width, height), dpi=DPI)
     ticks = np.arange(0,img_width,3*DPI)
@@ -54,15 +59,15 @@ def parseArgs():
 
     parser.add_argument('algorithm', nargs='?', choices=['mandelbrot', 'burningShip'],
                         default='mandelbrot', help='Fractal algorithm')
-    parser.add_argument('xmin',nargs='?', type=float, default = -1.5)
-    parser.add_argument('xmax', nargs='?', type=float, default = 1.5)
-    parser.add_argument('ymin', nargs='?', type=float, default = -1.5)
-    parser.add_argument('ymax', nargs='?', type=float, default = 1.5)
+    parser.add_argument('xmin',nargs='?', type=float, default = -1.5, help = 'Minimal value on x axis')
+    parser.add_argument('xmax', nargs='?', type=float, default = 1.5, help = 'Maximum value on x axis')
+    parser.add_argument('ymin', nargs='?', type=float, default = -1.5, help = 'Minimal value on y axis')
+    parser.add_argument('ymax', nargs='?', type=float, default = 1.5, help = 'Maximum value on y axis')
 
     return parser.parse_args()
 
 def main():
     args = parseArgs()
-    drawPlot(args.xmin, args.xmax, args.ymin, args.ymax)    
+    drawPlot(args.algorithm, args.xmin, args.xmax, args.ymin, args.ymax)    
 
 main()
