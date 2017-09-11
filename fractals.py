@@ -4,7 +4,7 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 
-DPI = 72
+DPI = 150
 
 def mandelbrot(c,iterationsNumber):
     z = c
@@ -36,7 +36,7 @@ def buildFractal(algorithm, xmin,xmax,ymin,ymax,width,height,iterationsNumber):
                 raise ValueError("Bad algorithm value")
     return (r1,r2,n3)
 
-def drawPlot(algorithm, xmin,xmax,ymin,ymax,width=10,height=10,iterationsNumber=256):    
+def drawPlot(algorithm, colormap, xmin,xmax,ymin,ymax,width=10,height=10,iterationsNumber=256):    
     img_width = DPI * width
     img_height = DPI * height
     x,y,z = buildFractal(algorithm, xmin,xmax,ymin,ymax,img_width,img_height,iterationsNumber)
@@ -48,7 +48,7 @@ def drawPlot(algorithm, xmin,xmax,ymin,ymax,width=10,height=10,iterationsNumber=
     y_ticks = ymin + (ymax-ymin)*ticks/img_width
     plt.yticks(ticks, y_ticks)
     
-    ax.imshow(z.T,origin='lower')
+    ax.imshow(z.T, cmap = colormap, origin='lower')
 
     fig.show()
     
@@ -59,6 +59,7 @@ def parseArgs():
 
     parser.add_argument('algorithm', nargs='?', choices=['mandelbrot', 'burningShip'],
                         default='mandelbrot', help='Fractal algorithm')
+    parser.add_argument("colormap", nargs='?', default='hot', help='Plot colormap')
     parser.add_argument('xmin',nargs='?', type=float, default = -1.5, help = 'Minimal value on x axis')
     parser.add_argument('xmax', nargs='?', type=float, default = 1.5, help = 'Maximum value on x axis')
     parser.add_argument('ymin', nargs='?', type=float, default = -1.5, help = 'Minimal value on y axis')
@@ -68,6 +69,6 @@ def parseArgs():
 
 def main():
     args = parseArgs()
-    drawPlot(args.algorithm, args.xmin, args.xmax, args.ymin, args.ymax)    
+    drawPlot(args.algorithm, args.colormap, args.xmin, args.xmax, args.ymin, args.ymax)    
 
 main()
