@@ -24,10 +24,14 @@ Simply launch fractal.py file and watch fractals!
 
 # Images
 
+    fractals.py mandelbrot magma -2 2 -2 2
+
 ![Alt Mandelbrot](/images/mandelbrot.png?raw=true "Mandelbrot")
 
+    fractals.py burningShip hot -2 2 -2 2
 
 ![Alt Burning Ship](/images/burningShip.png?raw=true "Burning Ship")
+
 
 # License
 
