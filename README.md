@@ -8,6 +8,8 @@ Aim of the project is drawing of escape-time fractals. They currently include:
 
 * [Mandelbrot fractal](https://en.wikipedia.org/wiki/Mandelbrot_set)
 
+* [Julia fractal](https://en.wikipedia.org/wiki/Julia_set)
+
 * [Burning ship fractal](https://en.wikipedia.org/wiki/Burning_Ship_fractal)
 
 # Prerequisites
@@ -24,11 +26,11 @@ Simply launch fractal.py file and watch fractals!
 
 # Images
 
-    fractals.py mandelbrot magma -2 2 -2 2
+    fractals.py --algorithm mandelbrot --colormap magma --xmin -2 --xmax 2 --ymin -2 --ymax 2
 
 ![Alt Mandelbrot](/images/mandelbrot.png?raw=true "Mandelbrot")
 
-    fractals.py burningShip hot -2 2 -2 2
+    fractals.py --algorithm burningShip --colormap hot --xmin -2 --xmax 2 --ymin -2 --ymax 2
 
 ![Alt Burning Ship](/images/burningShip.png?raw=true "Burning Ship")
 

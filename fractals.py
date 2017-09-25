@@ -6,40 +6,41 @@ import matplotlib.pyplot as plt
 
 DPI = 150
 
-def mandelbrot(c,iterationsNumber):
-    z = c
+def quadratic(z, c):
+    return z*z + c
+
+def burningShip(z, c):
+    return pow(abs(z.real) + 1j*abs(z.imag), 2) + c
+    
+def iterateFractal(algorithm, c, z0, iterationsNumber):
+    z = z0
     for n in range(iterationsNumber):
         if abs(z) > 2:
-            return n
-        z = z*z + c
-    return 0
+            return n        
+        if algorithm == "mandelbrot":
+            z = quadratic(z, z0)
+        elif algorithm == "julia":
+            z = quadratic(z, c)
+        elif algorithm == "burningShip":
+            z = burningShip(z, z0)       
+        else:
+            raise ValueError("Bad algorithm value");
+             
+    return 0   
 
-def burningShip(c,iterationsNumber):
-    z = c
-    for n in range(iterationsNumber):
-        if abs(z) > 2:
-            return n
-        z = pow(abs(z.real) + 1j*abs(z.imag), 2) + c
-    return 0
-
-def buildFractal(algorithm, xmin,xmax,ymin,ymax,width,height,iterationsNumber):
+def buildFractal(algorithm, c, xmin,xmax,ymin,ymax,width,height,iterationsNumber):
     r1 = np.linspace(xmin, xmax, width)
     r2 = np.linspace(ymin, ymax, height)
     n3 = np.empty((width,height))
     for i in range(width):
-        for j in range(height):
-            if algorithm == "mandelbrot":
-                n3[i,j] = mandelbrot(r1[i] + 1j*r2[j],iterationsNumber)
-            elif algorithm == "burningShip":
-                n3[i,j] = burningShip(r1[i] + 1j*r2[j],iterationsNumber)
-            else:
-                raise ValueError("Bad algorithm value")
+        for k in range(height):
+            n3[i,k] = iterateFractal(algorithm, c, r1[i] + 1j*r2[k], iterationsNumber)            
     return (r1,r2,n3)
 
-def drawPlot(algorithm, colormap, xmin,xmax,ymin,ymax,width=10,height=10,iterationsNumber=256):    
+def drawPlot(algorithm, colormap, c, xmin,xmax,ymin,ymax,width=10,height=10,iterationsNumber=256):    
     img_width = DPI * width
     img_height = DPI * height
-    x,y,z = buildFractal(algorithm, xmin,xmax,ymin,ymax,img_width,img_height,iterationsNumber)
+    x,y,z = buildFractal(algorithm, c, xmin,xmax,ymin,ymax,img_width,img_height,iterationsNumber)
     
     fig, ax = plt.subplots(figsize=(width, height), dpi=DPI)
     ticks = np.arange(0,img_width,3*DPI)
@@ -57,18 +58,19 @@ def drawPlot(algorithm, colormap, xmin,xmax,ymin,ymax,width=10,height=10,iterati
 def parseArgs():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('algorithm', nargs='?', choices=['mandelbrot', 'burningShip'],
+    parser.add_argument('--algorithm', nargs='?', choices=['mandelbrot', 'burningShip', 'julia'],
                         default='mandelbrot', help='Fractal algorithm')
-    parser.add_argument("colormap", nargs='?', default='hot', help='Plot colormap')
-    parser.add_argument('xmin',nargs='?', type=float, default = -1.5, help = 'Minimal value on x axis')
-    parser.add_argument('xmax', nargs='?', type=float, default = 1.5, help = 'Maximum value on x axis')
-    parser.add_argument('ymin', nargs='?', type=float, default = -1.5, help = 'Minimal value on y axis')
-    parser.add_argument('ymax', nargs='?', type=float, default = 1.5, help = 'Maximum value on y axis')
+    parser.add_argument("--colormap", nargs='?', default='hot', help='Plot colormap')
+    parser.add_argument('--c', nargs='?', type=complex, default = -0.8j, help = 'Complex argument for Julia set')
+    parser.add_argument('--xmin',nargs='?', type=float, default = -1.5, help = 'Minimal value on x axis')
+    parser.add_argument('--xmax', nargs='?', type=float, default = 1.5, help = 'Maximum value on x axis')
+    parser.add_argument('--ymin', nargs='?', type=float, default = -1.5, help = 'Minimal value on y axis')
+    parser.add_argument('--ymax', nargs='?', type=float, default = 1.5, help = 'Maximum value on y axis')
 
     return parser.parse_args()
 
 def main():
     args = parseArgs()
-    drawPlot(args.algorithm, args.colormap, args.xmin, args.xmax, args.ymin, args.ymax)    
+    drawPlot(args.algorithm, args.colormap, args.c, args.xmin, args.xmax, args.ymin, args.ymax)    
 
 main()
