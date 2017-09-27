@@ -30,6 +30,14 @@ Simply launch fractal.py file and watch fractals!
 
 ![Alt Mandelbrot](/images/mandelbrot.png?raw=true "Mandelbrot")
 
+    fractals.py --algorithm julia  --c 0-0.8j
+    
+ ![Alt Julia](/images/julia0_8_j.png?raw=true "Julia")
+ 
+     fractals.py --algorithm julia  --c " -0.8+0.156j" --xmin -2 --xmax 2 --ymin -2 --ymax 2
+    
+ ![Alt Julia](/images/julia0_8_0_156_j.png?raw=true "Julia")
+
     fractals.py --algorithm burningShip --colormap hot --xmin -2 --xmax 2 --ymin -2 --ymax 2
 
 ![Alt Burning Ship](/images/burningShip.png?raw=true "Burning Ship")
