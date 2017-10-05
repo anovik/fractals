@@ -3,19 +3,22 @@
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 DPI = 150
 
 def quadratic(z, c):
     return z*z + c
 
-def burningShip(z, c):
-    return pow(abs(z.real) + 1j*abs(z.imag), 2) + c
+def burningShip(z, c):    
+    return quadratic(math.fabs(z.real) + 1j*math.fabs(z.imag), c)
     
 def iterateFractal(algorithm, c, z0, iterationsNumber):
-    z = z0
+    z = 0
+    if algorithm == "julia":
+        z = z0
     for n in range(iterationsNumber):
-        if abs(z) > 2:
+        if z.real*z.real + z.imag*z.imag > 4:
             return n        
         if algorithm == "mandelbrot":
             z = quadratic(z, z0)
