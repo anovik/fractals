@@ -4,6 +4,7 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+import time
 
 DPI = 150
 
@@ -40,23 +41,20 @@ def buildFractal(algorithm, c, xmin,xmax,ymin,ymax,width,height,iterationsNumber
             n3[i,k] = iterateFractal(algorithm, c, r1[i] + 1j*r2[k], iterationsNumber)            
     return (r1,r2,n3)
 
-def drawPlot(algorithm, colormap, c, xmin,xmax,ymin,ymax,width=10,height=10,iterationsNumber=256):    
+def drawPlot(algorithm, colormap, c, xmin,xmax,ymin,ymax,width=10,height=10,iterationsNumber=256, filename = "fractal.png"):    
     img_width = DPI * width
     img_height = DPI * height
     x,y,z = buildFractal(algorithm, c, xmin,xmax,ymin,ymax,img_width,img_height,iterationsNumber)
     
-    fig, ax = plt.subplots(figsize=(width, height), dpi=DPI)
-    ticks = np.arange(0,img_width,3*DPI)
-    x_ticks = xmin + (xmax-xmin)*ticks/img_width
-    plt.xticks(ticks, x_ticks)
-    y_ticks = ymin + (ymax-ymin)*ticks/img_width
-    plt.yticks(ticks, y_ticks)
-    
+    fig, ax = plt.subplots(figsize=(width, height), dpi=DPI)          
+    plt.xticks([]) 
+    plt.yticks([]) 
+	
     ax.imshow(z.T, cmap = colormap, origin='lower')
 
     fig.show()
     
-    fig.savefig("fractal.png")
+    fig.savefig(filename)
 
 def parseArgs():
     parser = argparse.ArgumentParser()
@@ -69,11 +67,14 @@ def parseArgs():
     parser.add_argument('--xmax', nargs='?', type=float, default = 1.5, help = 'Maximum value on x axis')
     parser.add_argument('--ymin', nargs='?', type=float, default = -1.5, help = 'Minimal value on y axis')
     parser.add_argument('--ymax', nargs='?', type=float, default = 1.5, help = 'Maximum value on y axis')
+    parser.add_argument('--output', nargs='?', default = "fractal.png", help = 'Output filename')
 
     return parser.parse_args()
 
 def main():
     args = parseArgs()
-    drawPlot(args.algorithm, args.colormap, args.c, args.xmin, args.xmax, args.ymin, args.ymax)    
+    start_time = time.time()
+    drawPlot(args.algorithm, args.colormap, args.c, args.xmin, args.xmax, args.ymin, args.ymax, filename = args.output)   
+    print("--- %.2f seconds ---" % (time.time() - start_time))	
 
 main()
