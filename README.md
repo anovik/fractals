@@ -22,7 +22,9 @@ To run script you need the following to be installed:
 
 * Numpy
 
-Simply launch fractal.py file and watch fractals!
+* Numba 
+
+Simply launch fractal.py file and watch fractals! Or you can run demo.bat for getting the main fractal images.
 
 # Images
 

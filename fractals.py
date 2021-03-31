@@ -2,24 +2,29 @@
 
 import argparse
 import numpy as np
+from numba import jit
 import matplotlib.pyplot as plt
-import math
 import time
 
 DPI = 150
 
-def quadratic(z, c):
-    return z*z + c
 
+@jit(nopython=True, parallel=True, nogil=True)
+def quadratic(z, c):
+    return z**2 + c
+
+
+@jit(nopython=True, parallel=True, nogil=True)
 def burningShip(z, c):    
-    return quadratic(math.fabs(z.real) + 1j*math.fabs(z.imag), c)
+    return quadratic(np.abs(z.real) + 1j*np.abs(z.imag), c)
     
+@jit(nopython=True, parallel=True, nogil=True)
 def iterateFractal(algorithm, c, z0, iterationsNumber):
     z = 0
     if algorithm == "julia":
         z = z0
     for n in range(iterationsNumber):
-        if z.real*z.real + z.imag*z.imag > 4:
+        if z.real**2 + z.imag**2 > 4:
             return n        
         if algorithm == "mandelbrot":
             z = quadratic(z, z0)
@@ -32,6 +37,7 @@ def iterateFractal(algorithm, c, z0, iterationsNumber):
              
     return 0   
 
+@jit(nopython=True, parallel=True, nogil=True)
 def buildFractal(algorithm, c, xmin,xmax,ymin,ymax,width,height,iterationsNumber):
     r1 = np.linspace(xmin, xmax, width)
     r2 = np.linspace(ymin, ymax, height)
