@@ -12,13 +12,15 @@ Aim of the project is drawing of escape-time fractals. They currently include:
 
 * [Burning ship fractal](https://en.wikipedia.org/wiki/Burning_Ship_fractal)
 
+* [Newton fractal](https://en.wikipedia.org/wiki/Newton_fractal)
+
 # Prerequisites
 
 To run script you need the following to be installed:
 
 * Python 3
 
-* Mathplotlib
+* Matplotlib
 
 * Numpy
 
@@ -27,6 +29,10 @@ To run script you need the following to be installed:
 Simply launch fractal.py file and watch fractals! Or you can run demo.bat for getting the main fractal images.
 
 # Images
+    
+    fractals.py --algorithm newton --colormap RdYlBu 
+    
+![Alt Newton](/images/newton.png?raw=true "Newton")
 
     fractals.py --algorithm mandelbrot --colormap magma --xmin -2 --xmax 2 --ymin -2 --ymax 2
 
