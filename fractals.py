@@ -6,7 +6,9 @@ from numba import jit
 import matplotlib.pyplot as plt
 import time
 
-DPI = 150
+DPI = 300
+
+tolerance = 0.000001
 
 
 @jit(nopython=True, parallel=True, nogil=True)
@@ -16,25 +18,40 @@ def quadratic(z, c):
 
 @jit(nopython=True, parallel=True, nogil=True)
 def burningShip(z, c):    
-    return quadratic(np.abs(z.real) + 1j*np.abs(z.imag), c)
+    return quadratic(np.abs(z.real) + 1j*np.abs(z.imag), c)	
+
+
+@jit(nopython=True, parallel=True, nogil=True)
+def newton(z):
+    if z == 0:
+	    return 0
+    return z - (z**3 - 1) / (3*z**2) 
     
 @jit(nopython=True, parallel=True, nogil=True)
 def iterateFractal(algorithm, c, z0, iterationsNumber):
-    z = 0
-    if algorithm == "julia":
+    #Roots (solutions) of the Newton equation
+    roots = [1 + 0j, -.5 + 1j * np.sqrt(3)/2, -.5 - 1j * np.sqrt(3)/2]
+    z = 0    
+    if algorithm == "julia" or algorithm == "newton":
         z = z0
     for n in range(iterationsNumber):
-        if z.real**2 + z.imag**2 > 4:
+        if algorithm != "newton" and z.real**2 + z.imag**2 > 4:
             return n        
         if algorithm == "mandelbrot":
             z = quadratic(z, z0)
         elif algorithm == "julia":
             z = quadratic(z, c)
         elif algorithm == "burningShip":
-            z = burningShip(z, z0)       
+            z = burningShip(z, z0)  
+        elif algorithm == "newton":
+            z = newton(z)            
+            for i in range(3):
+                difference = z - roots[i]				
+                if (np.abs(difference.real) < tolerance and np.abs(difference.imag) < tolerance):                    
+                    return (i + 1)*20          			
         else:
-            raise ValueError("Bad algorithm value");
-             
+            raise ValueError("Bad algorithm value")             
+    
     return 0   
 
 @jit(nopython=True, parallel=True, nogil=True)
@@ -65,7 +82,7 @@ def drawPlot(algorithm, colormap, c, xmin,xmax,ymin,ymax,width=10,height=10,iter
 def parseArgs():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--algorithm', nargs='?', choices=['mandelbrot', 'burningShip', 'julia'],
+    parser.add_argument('--algorithm', nargs='?', choices=['mandelbrot', 'burningShip', 'julia', 'newton'],
                         default='mandelbrot', help='Fractal algorithm')
     parser.add_argument("--colormap", nargs='?', default='hot', help='Plot colormap')
     parser.add_argument('--c', nargs='?', type=complex, default = -0.8j, help = 'Complex argument for Julia set')
