@@ -73,11 +73,10 @@ def drawPlot(algorithm, colormap, c, xmin,xmax,ymin,ymax,width=10,height=10,iter
     plt.xticks([]) 
     plt.yticks([]) 
 	
-    ax.imshow(z.T, cmap = colormap, origin='lower')
-
-    fig.show()
+    ax.imshow(z.T, cmap = colormap, origin='lower')    
     
     fig.savefig(filename)
+    fig.clear()
 
 def parseArgs():
     parser = argparse.ArgumentParser()
